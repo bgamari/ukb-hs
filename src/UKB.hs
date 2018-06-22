@@ -61,6 +61,7 @@ closeUKB :: UKB -> IO ()
 closeUKB (UKB hIn hOut) = hClose hIn >> hClose hOut
 
 run :: UKB -> [InputToken] -> IO [OutputToken]
+run _ [] = return []
 run (UKB hIn hOut) toks = do
     TLIO.hPutStr hIn $ TB.toLazyText $ "ctx\n" <> foldMap token toks <> "\n\n\n"
     hFlush hIn
