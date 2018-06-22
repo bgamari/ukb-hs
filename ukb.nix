@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "bgamari";
     repo = "ukb";
-    rev = "a57bd367dd2a30717b6032b3c3a1aad2dd2027ff";
+    rev = "f4243169a7500bfcded4ff472ac71e3428a2f7ab";
     sha256 = null;
   };
   sourceRoot = "source/src";
