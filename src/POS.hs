@@ -1,4 +1,9 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE OverloadedStrings #-}
+
+#ifndef POS_TAG_PATH
+#define POS_TAG_PATH "pos-tag.py"
+#endif
 
 module POS
     ( Tagger
@@ -56,7 +61,7 @@ toPOS other  = error $ "unknown POS: "++show other
 startTagger :: IO Tagger
 startTagger = do
     (Just hIn, Just hOut, _, _) <-
-        createProcess $ (proc "./pos-tag.py" []){ std_out = CreatePipe, std_in = CreatePipe }
+        createProcess $ (proc POS_TAG_PATH []){ std_out = CreatePipe, std_in = CreatePipe }
     return $ Tagger hIn hOut
 
 closeTagger :: Tagger -> IO ()

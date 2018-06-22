@@ -1,19 +1,10 @@
-with (import <nixpkgs> {});
-let
-  ukb = stdenv.mkDerivation {
-    name = "ukb";
-    src = fetchFromGitHub {
-      owner = "bgamari";
-      repo = "ukb";
-      rev = "a57bd367dd2a30717b6032b3c3a1aad2dd2027ff";
-      sha256 = null;
-    };
-    sourceRoot = "source/src";
-    patches = [ ./ukb-parsability.patch ];
+{ pkgs ? (import <nixpkgs> {}) }:
 
-    nativeBuildInputs = [ autoreconfHook ];
-    buildInputs = [ boost ];
-    configureFlags = [ "--with-boost-include=${boost.dev}/include" "--with-boost-lib=${boost}/lib" ];
-    enableParallelBuilding = true;
-  };
-in ukb
+let
+  ukb = pkgs.callPackage (import ./ukb.nix) {};
+  drv = pkgs.haskellPackages.callCabal2nix "ukb" ./. {};
+  inherit (pkgs.haskell.lib) appendConfigureFlag;
+in 
+  appendConfigureFlag
+    (appendConfigureFlag drv "--ghc-option=-DPOS_TAG_PATH=\"${./pos-tag.py}\"")
+    "--ghc-option=-DUKB_WSD_PATH=\"${ukb}/bin/ukb_wsd\""
