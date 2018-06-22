@@ -9,7 +9,7 @@ import UKB
 main :: IO ()
 main = do
     tagger <- POS.startTagger
-    ukb <- startUKB "../lkb_sources/30/wnet30_dict.txt" "../wn30+gloss.bin"
+    ukb <- startUKB "wnet30_dict.txt" "wn30+gloss.bin"
     forever $ do
         test <- TIO.getLine
         tags <- POS.posTag tagger test

@@ -26,9 +26,14 @@ data POS = Noun | Verb | Adjective | Adverb | Preposition | Other
          deriving (Eq, Ord, Show, Bounded, Enum)
 data Tagger = Tagger Handle Handle
 
+newtype Request = Request T.Text
+
+instance ToJSON Request where
+    toJSON (Request s) = object [ "text" .= s ]
+
 posTag :: Tagger -> T.Text -> IO [(T.Text, POS)]
 posTag (Tagger hIn hOut) text = do
-    TIO.hPutStrLn hIn text
+    BSL.hPutStrLn hIn $ encode $ Request text
     hFlush hIn
     out <- BS.hGetLine hOut
     Just tokens <- pure $ decode $ BSL.fromStrict out
