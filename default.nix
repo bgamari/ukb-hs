@@ -21,7 +21,7 @@ let
 
   posResources = pkgs.stdenv.mkDerivation {
     name = "pos-tag-resources";
-    buildInputs = [ pythonPackages.nltk pythonPackages.six ];
+    buildInputs = [ pythonPackages.nltk pythonPackages.six pkgs.cacert ];
     buildCommand = ''
       mkdir -p $out
       python -m nltk.downloader -q -d $out punkt averaged_perceptron_tagger wordnet
