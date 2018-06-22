@@ -1,18 +1,12 @@
-commit 7bd68f102863dac273574db10dc512c7f21e75ff
-Author: Laura Dietz <dietz@cs.umass.edu>
-Date:   Fri Jun 22 00:13:06 2018 -0400
-
-    Make it possible to parse
-
 diff --git a/src/ukb_wsd.cc b/src/ukb_wsd.cc
-index 79c2700..2e3606b 100644
---- a/ukb_wsd.cc
-+++ b/ukb_wsd.cc
-@@ -260,6 +260,7 @@ void dispatch_run(istream & is, ostream & os) {
- 			if(ctx.size()) {
- 				dispatch_run_cs(cs);
- 				cs.print_csent(os);
-+				os << "~~~~~~~~\n";
- 			} else {
- 				if (glVars::debug::warning) {
+index 79c2700..64b171a 100644
+--- a/src/ukb_wsd.cc
++++ b/src/ukb_wsd.cc
+@@ -265,6 +265,7 @@ void dispatch_run(istream & is, ostream & os) {
  					cerr << "[W] empty context " << cs.id() + " in line " + lexical_cast<string>(l_n) + "\n";
+ 				}
+ 			}
++		        os << "~~~~~~~~\n";
+ 		} catch (ukb::wdict_error & e) {
+ 			throw e;
+ 		} catch (std::logic_error & e) {
