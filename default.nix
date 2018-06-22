@@ -1,8 +1,8 @@
-{ pkgs ? (import <nixpkgs> {}) }:
+{ pkgs ? (import <nixpkgs> {}), haskellPackages ? pkgs.haskellPackages }:
 
 let
   ukb = pkgs.callPackage (import ./ukb.nix) {};
-  drv = pkgs.haskellPackages.callCabal2nix "ukb" ./. {};
+  drv = haskellPackages.callCabal2nix "ukb" ./. {};
   inherit (pkgs.haskell.lib) appendConfigureFlag;
 in 
   appendConfigureFlag
