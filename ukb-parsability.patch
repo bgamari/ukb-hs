@@ -1,7 +1,7 @@
 diff --git a/src/ukb_wsd.cc b/src/ukb_wsd.cc
 index 79c2700..64b171a 100644
---- a/src/ukb_wsd.cc
-+++ b/src/ukb_wsd.cc
+--- a/ukb_wsd.cc
++++ b/ukb_wsd.cc
 @@ -265,6 +265,7 @@ void dispatch_run(istream & is, ostream & os) {
  					cerr << "[W] empty context " << cs.id() + " in line " + lexical_cast<string>(l_n) + "\n";
  				}
