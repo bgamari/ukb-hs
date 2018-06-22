@@ -1,22 +1,27 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+import Control.Monad
+import qualified Data.Text as T
+import qualified Data.Text.IO as TIO
 import qualified POS
 import UKB
 
 main :: IO ()
 main = do
     tagger <- POS.startTagger
-    tags <- POS.posTag tagger "the man killed the cat with a hammer"
-    print tags
-    let tokens =
-            [ UKB.InputToken (Lemma tok) pos' (WordId n)
-            | (n, (tok, pos)) <- zip [0..] tags
-            , Just pos' <- pure $ toUkbPos pos
-            ]
-
     ukb <- startUKB "../lkb_sources/30/wnet30_dict.txt" "../wn30+gloss.bin"
-    res <- run ukb tokens
-    print res
+    forever $ do
+        test <- TIO.getLine
+        tags <- POS.posTag tagger test
+        print tags
+        let tokens =
+                [ UKB.InputToken (Lemma tok) pos' (WordId n)
+                | (n, (tok, pos)) <- zip [0..] tags
+                , Just pos' <- pure $ toUkbPos pos
+                ]
+
+        res <- run ukb tokens
+        print res
 
 toUkbPos :: POS.POS -> Maybe UKB.POS
 toUkbPos pos =
