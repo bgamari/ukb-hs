@@ -46,7 +46,7 @@ startUKB :: FilePath -- ^ dictionary
          -> IO UKB
 startUKB dictPath kbPath = do
     (Just hIn, Just hOut, _, _) <-
-        createProcess (proc "../result/bin/ukb_wsd" args){ std_out = CreatePipe, std_in = CreatePipe }
+        createProcess (proc "./result/bin/ukb_wsd" args){ std_out = CreatePipe, std_in = CreatePipe }
     hello <- BS.hGetLine hOut
     unless ("!! " `BS.isPrefixOf` hello) $ fail $ "invalid hello sequence: "++show hello
     return $ UKB hIn hOut
