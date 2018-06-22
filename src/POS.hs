@@ -34,29 +34,16 @@ posTag (Tagger hIn hOut) text = do
     Just tokens <- pure $ decode $ BSL.fromStrict out
     return $ map (second toPOS) tokens
 
+-- | See
+-- https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html
 toPOS :: T.Text -> POS
-toPOS "NN"   = Noun
-toPOS "NNS"  = Noun
-toPOS "NNP"  = Noun
-toPOS "VB"   = Verb
-toPOS "VBZ"  = Verb
-toPOS "VBP"  = Verb
-toPOS "VBD"  = Verb
-toPOS "PRP"  = Preposition
-toPOS "PRP$" = Preposition
-toPOS "JJ"   = Adjective
-toPOS "EX"   = Other  -- existential?
-toPOS "LS"   = Other
-toPOS "IN"   = Other  -- "in"
-toPOS "POS"  = Other  -- possessive
-toPOS "DT"   = Other  -- determiner
-toPOS "WDT"  = Other
-toPOS "RB"   = Other
-toPOS "CC"   = Other
-toPOS "TO"   = Other
-toPOS "."    = Other
-toPOS ","    = Other
-toPOS other  = error $ "unknown POS: "++show other
+toPOS x =
+    case T.head x of
+      'N' -> Noun
+      'V' -> Verb
+      'J' -> Adjective
+      'R' -> Adverb
+      _   -> Other
 
 startTagger :: IO Tagger
 startTagger = do
