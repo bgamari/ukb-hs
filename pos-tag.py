@@ -12,8 +12,10 @@ if data_dir:
 
 lemmatizer = WordNetLemmatizer()
 
-while True:
+while not sys.stdin.closed:
     line = sys.stdin.readline()
+    if line == '':
+        continue
     req = json.loads(line)
     text = nltk.word_tokenize(req['text'])
     tags = [ (lemmatizer.lemmatize(term), pos)
