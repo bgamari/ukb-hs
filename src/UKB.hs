@@ -44,6 +44,20 @@ newtype Lemma = Lemma T.Text
 newtype ConceptId = ConceptId T.Text
                   deriving (Eq, Ord, Show)
 
+parseConceptId :: ConceptId -> (Int, POS)
+parseConceptId (ConceptId s) =
+    case T.decimal s of
+      Left err -> error $ "UKB.parseConceptId: "++err++": "++show s
+      Right (n, rest)
+        | Just posChar <- "-" `T.stripPrefix` rest ->
+            let pos = case posChar of
+                  "n" -> Noun
+                  "v" -> Verb
+                  "a" -> Adj
+                  "r" -> Adv
+            in (n, pos)
+        | otherwise -> error $ "UKB.parseConceptId: ill-formed ConceptId: "++show s
+
 data UKB = UKB Handle Handle -- in out
 
 startUKB :: FilePath -- ^ dictionary
@@ -61,6 +75,7 @@ closeUKB :: UKB -> IO ()
 closeUKB (UKB hIn hOut) = hClose hIn >> hClose hOut
 
 run :: UKB -> [InputToken] -> IO [OutputToken]
+run _ [] = return []
 run (UKB hIn hOut) toks = do
     TLIO.hPutStr hIn $ TB.toLazyText $ "ctx\n" <> foldMap token toks <> "\n\n\n"
     hFlush hIn
